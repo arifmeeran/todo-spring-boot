@@ -22,9 +22,9 @@ pipeline {
             }
         }
         stage('Long-running Verification') {
-            environment {
-                SONAR_LOGIN = credentials('SONARCLOUD_TOKEN')
-            }
+           // environment {
+              //  SONAR_LOGIN = credentials('SONARCLOUD_TOKEN')
+            // }
             parallel {
                 stage('Integration Tests') {
                     steps {
@@ -38,7 +38,8 @@ pipeline {
                 }
                 stage('Code Analysis') {
                     steps {
-                        gradlew('sonarqube')
+                        echo 'Sonarqube'
+                        //gradlew('sonarqube')
                     }
                 }
             }
@@ -57,12 +58,13 @@ pipeline {
             }
         }
         stage('Deploy to Production') {
-            environment {
-                HEROKU_API_KEY = credentials('HEROKU_API_KEY')
-            }
+            // environment {
+                // HEROKU_API_KEY = credentials('HEROKU_API_KEY')
+           // }
             steps {
                 unstash 'app'
-                gradlew('deployHeroku')
+                echo 'DeployHeroku'
+                //gradlew('deployHeroku')
             }
         }
     }
@@ -74,5 +76,6 @@ pipeline {
 }
 
 def gradlew(String... args) {
-    sh "./gradlew ${args.join(' ')} -s"
+    // sh "./gradlew ${args.join(' ')} -s"
+    bat label: '', script: ".\\gradlew ${args.join(' ')}"
 }
